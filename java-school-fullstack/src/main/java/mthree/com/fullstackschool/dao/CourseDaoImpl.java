@@ -22,8 +22,14 @@ public class CourseDaoImpl implements CourseDao {
     public Course createNewCourse(Course course) {
         //YOUR CODE STARTS HERE
 
-
-        return null;
+        var result = jdbcTemplate.update("INSERT INTO course VALUES (?, ?, ?, ?)",
+            course.getCourseId(),
+            course.getCourseName(),
+            course.getCourseDesc(),
+            course.getTeacherId());
+        
+        if (result == 1) return course;
+        else return null;
 
         //YOUR CODE ENDS HERE
     }
@@ -32,8 +38,7 @@ public class CourseDaoImpl implements CourseDao {
     public List<Course> getAllCourses() {
         //YOUR CODE STARTS HERE
 
-
-        return null;
+        return jdbcTemplate.query("SELECT * FROM course", new CourseMapper());
 
         //YOUR CODE ENDS HERE
     }
@@ -42,7 +47,7 @@ public class CourseDaoImpl implements CourseDao {
     public Course findCourseById(int id) {
         //YOUR CODE STARTS HERE
 
-        return null;
+        return jdbcTemplate.queryForObject("SELECT * FROM course WHERE cid=?", new CourseMapper(), id);
 
         //YOUR CODE ENDS HERE
     }
@@ -51,7 +56,11 @@ public class CourseDaoImpl implements CourseDao {
     public void updateCourse(Course course) {
         //YOUR CODE STARTS HERE
 
-
+        jdbcTemplate.update("UPDATE course SET courseCode=?, courseDesc=?, teacherId=? WHERE cid=?",
+            course.getCourseName(),
+            course.getCourseDesc(),
+            course.getTeacherId(),
+            course.getCourseId());
 
         //YOUR CODE ENDS HERE
     }
@@ -60,7 +69,7 @@ public class CourseDaoImpl implements CourseDao {
     public void deleteCourse(int id) {
         //YOUR CODE STARTS HERE
 
-
+        jdbcTemplate.update("DELETE FROM course WHERE cid=?", id);
 
         //YOUR CODE ENDS HERE
     }
@@ -69,7 +78,7 @@ public class CourseDaoImpl implements CourseDao {
     public void deleteAllStudentsFromCourse(int courseId) {
         //YOUR CODE STARTS HERE
 
-
+        jdbcTemplate.update("DELETE FROM course_student WHERE course_id=?", courseId);
 
         //YOUR CODE ENDS HERE
     }
