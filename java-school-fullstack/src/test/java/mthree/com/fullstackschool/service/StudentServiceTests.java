@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import mthree.com.fullstackschool.dao.CourseDao;
 
 public class StudentServiceTests {
 
@@ -14,7 +15,9 @@ public class StudentServiceTests {
 
     public StudentServiceTests() {
         StudentDao studentDao = new studentDaoStubImpl();
-        studentService = new StudentServiceImpl(studentDao);
+        CourseDao courseDao = new CourseDaoStubImpl();
+        CourseServiceImpl courseService = new CourseServiceImpl(courseDao);
+        studentService = new StudentServiceImpl(studentDao, courseService);
     }
 
     @Test

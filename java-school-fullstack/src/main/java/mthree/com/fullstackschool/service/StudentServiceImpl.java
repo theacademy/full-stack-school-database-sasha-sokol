@@ -3,6 +3,7 @@ package mthree.com.fullstackschool.service;
 import mthree.com.fullstackschool.dao.StudentDao;
 import mthree.com.fullstackschool.model.Course;
 import mthree.com.fullstackschool.model.Student;
+import java.text.MessageFormat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
@@ -16,11 +17,15 @@ public class StudentServiceImpl implements StudentServiceInterface {
     @Autowired
     private StudentDao studentDao;
 
+    @Autowired
+    private CourseServiceImpl courseService;
+
     //YOUR CODE ENDS HERE
 
-    public StudentServiceImpl(StudentDao studentDao) {
+    public StudentServiceImpl(StudentDao studentDao, CourseServiceImpl courseService) {
         
         this.studentDao = studentDao;
+        this.courseService = courseService;
 
     }
 
@@ -98,7 +103,19 @@ public class StudentServiceImpl implements StudentServiceInterface {
     public void deleteStudentFromCourse(int studentId, int courseId) {
         //YOUR CODE STARTS HERE
 
+        var student = studentDao.findStudentById(studentId);
+        var course = courseService.getCourseById(courseId);
 
+        if (student.getStudentFirstName().equals("Student Not Found")) {
+            System.out.println("Student not found");
+        }
+        else if (course.getCourseName().equals("Course Not Found")) {
+            System.out.println("Course not found");
+        }
+        else {
+            studentDao.deleteStudentFromCourse(studentId, courseId);
+            System.out.println(MessageFormat.format("Student: {0} deleted from course: {1}", studentId, courseId));
+        }
 
         //YOUR CODE ENDS HERE
     }
@@ -106,6 +123,25 @@ public class StudentServiceImpl implements StudentServiceInterface {
     public void addStudentToCourse(int studentId, int courseId) {
         //YOUR CODE STARTS HERE
 
+        var student = studentDao.findStudentById(studentId);
+        var course = courseService.getCourseById(courseId);
+
+        if (student.getStudentFirstName().equals("Student Not Found")) {
+            System.out.println("Student not found");
+        }
+        else if (course.getCourseName().equals("Course Not Found")) {
+            System.out.println("Course not found");
+        }
+        else {
+            try {
+                studentDao.addStudentToCourse(studentId, courseId);
+                System.out.println(MessageFormat.format("Student: {0} added to course: {1}", studentId, courseId));
+            }
+            catch (DataAccessException e) {
+                System.out.println(MessageFormat.format("Student: {0} already enrolled in course: {1}", studentId, courseId));
+            }
+            
+        }
 
         //YOUR CODE ENDS HERE
     }
