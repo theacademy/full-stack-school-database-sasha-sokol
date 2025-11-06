@@ -91,7 +91,7 @@ public class StudentDaoImpl implements StudentDao {
     public void deleteStudentFromCourse(int studentId, int courseId) {
         //YOUR CODE STARTS HERE
 
-        jdbcTemplate.update("DELETE FROM course_student WHERE student_id=?, course_id=?", studentId, courseId);
+        jdbcTemplate.update("DELETE FROM course_student WHERE student_id=? AND course_id=?", studentId, courseId);
 
         //YOUR CODE ENDS HERE
     }
