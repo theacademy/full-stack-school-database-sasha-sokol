@@ -13,13 +13,21 @@ public class StudentServiceImpl implements StudentServiceInterface {
 
     //YOUR CODE STARTS HERE
 
+    @Autowired
+    private StudentDao studentDao;
 
     //YOUR CODE ENDS HERE
+
+    public StudentServiceImpl(StudentDao studentDao) {
+        
+        this.studentDao = studentDao;
+
+    }
 
     public List<Student> getAllStudents() {
         //YOUR CODE STARTS HERE
 
-        return null;
+        return studentDao.getAllStudents();
 
         //YOUR CODE ENDS HERE
     }
@@ -27,7 +35,18 @@ public class StudentServiceImpl implements StudentServiceInterface {
     public Student getStudentById(int id) {
         //YOUR CODE STARTS HERE
 
-        return null;
+        Student result;
+
+        try {
+            result = studentDao.findStudentById(id);
+        } 
+        catch (DataAccessException e) {
+            result = new Student();
+            result.setStudentFirstName("Student Not Found");
+            result.setStudentLastName("Student Not Found");
+        }
+
+        return result;
 
         //YOUR CODE ENDS HERE
     }
@@ -35,7 +54,19 @@ public class StudentServiceImpl implements StudentServiceInterface {
     public Student addNewStudent(Student student) {
         //YOUR CODE STARTS HERE
 
-        return null;
+        boolean studentOk = true;
+
+        if (student.getStudentFirstName().isBlank()) {
+            student.setStudentFirstName("First Name blank, student NOT added");
+            studentOk = false;
+        }
+        if (student.getStudentLastName().isBlank()) {
+            student.setStudentLastName("Last Name blank, student NOT added");
+            studentOk = false;
+        }
+
+        if (studentOk) return studentDao.createNewStudent(student);
+        else return student;
 
         //YOUR CODE ENDS HERE
     }
@@ -43,7 +74,15 @@ public class StudentServiceImpl implements StudentServiceInterface {
     public Student updateStudentData(int id, Student student) {
         //YOUR CODE STARTS HERE
 
-        return null;
+        if (id == student.getStudentId())
+        {
+            studentDao.updateStudent(student);
+        }
+        else {
+            student.setStudentFirstName("IDs do not match, student not updated");
+            student.setStudentLastName("IDs do not match, student not updated");
+        }
+        return student;
 
         //YOUR CODE ENDS HERE
     }
@@ -51,7 +90,7 @@ public class StudentServiceImpl implements StudentServiceInterface {
     public void deleteStudentById(int id) {
         //YOUR CODE STARTS HERE
 
-
+        studentDao.deleteStudent(id);
 
         //YOUR CODE ENDS HERE
     }
